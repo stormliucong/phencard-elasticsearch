@@ -22,9 +22,9 @@ class SearchResult():
             )
 
 
-def search(term: str) -> List[SearchResult]:
+def search(term: str, index_list: list) -> List[SearchResult]:
     es = Elasticsearch(['localhost:9200'], timeout=60, retry_on_timeout=True)
-    INDEX_NAMES = ['doid','msh','icd10']
+    INDEX_NAMES = index_list
     query_tokens = term.split( )
     query = " ".join([token+'~1' for token in query_tokens]) # default by OR and fuzzy.
     query_string_query = {
@@ -42,7 +42,7 @@ def search(term: str) -> List[SearchResult]:
             }
         }
     }
-
+    print(INDEX_NAMES)
     result = es.search(index=INDEX_NAMES, body=query_string_query)
         
     return [SearchResult.from_doc(hit) for hit in result["hits"]["hits"]]

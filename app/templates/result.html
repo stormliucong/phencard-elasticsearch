@@ -4,7 +4,7 @@
 
 <div>
     <div>
-        <table>
+        <table id='esresults'>
         <thead>
                 <tr>
                   <th>index</th>
@@ -26,4 +26,10 @@
         </table>
     </div>
 </div>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#esresults').DataTable();
+  } );
+</script>
+
 {% endblock %}

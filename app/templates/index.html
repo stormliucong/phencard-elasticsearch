@@ -1,51 +1,25 @@
 {% extends "base.html" %}
 
 {% block body %}
-  <!-- <style>
-    #search-bar {
-      display: flex;
-      margin: 20px 10px;
-    }
-
-    #search-bar input {
-      width: 100%;
-      padding: 10px;
-    }
-
-    #search-bar button {
-      margin-left: 15px;
-    }
-
-
-    .search {
-      margin: 0px 10px 20px 10px;
-      padding: 20px;
-      background: #fafaff;
-    }
-
-    .search-header {
-      height: 40px;
-    }
-
-    .search-term {
-      font-weight: bold;
-      color: #000;
-      text-decoration: none;
-    }
-
-    .search-results {
-      display: grid;
-      grid-template-columns: repeat(3, 100px);
-      grid-auto-rows: 150px;
-      grid-gap: 20px;
-    }
-
-  </style> -->
-
-
-  <form id="search-bar" action="/search">
-    <input type="text" placeholder="Search.." name="search" value="{{ search_term }}">
-    <button type="submit"><i class="fa fa-search">Search</i></button>
+  <form class="form-inline" id="search-bar" action="/search">
+    <div class="form-group">
+      <label>Phenotype Terms</label>
+      <input type="text" class="form-control" placeholder="Enter search terms..." name="search" value="{{ search_term }}">
+    </div>
+    
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="icd10" value="icd10" checked>
+      <label class="form-check-label" for="inlineCheckbox1">ICD10</label>
+      <input class="form-check-input" type="checkbox" id="inlineCheckbox2" name="msh" value="msh" checked>
+      <label class="form-check-label" for="inlineCheckbox2">MESH</label>
+      <input class="form-check-input" type="checkbox" id="inlineCheckbox3" name="doid" value="doid" checked>
+      <label class="form-check-label" for="inlineCheckbox3">DO-ID</label>
+      <input class="form-check-input" type="checkbox" id="inlineCheckbox3" name="umls" value="umls" disabled>
+      <label class="form-check-label" for="inlineCheckbox4"> UMLS</label>
+      
+    </div>
+    
+         <button type="submit"><i class="fa fa-search">Search</i></button>
   </form>
 
 {% endblock %}
