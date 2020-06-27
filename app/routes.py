@@ -21,15 +21,17 @@ def search_single_product():
     Return the top 50 results.
     """
     query = request.args.get('search')
-    index_list = []
-    if request.args.get('icd10'):
-        index_list.append('icd10')
-    if request.args.get('msh'):
-        index_list.append('msh')
-    if request.args.get('doid'):
-        index_list.append('doid')
-    if request.args.get('umls'):
-        index_list.append('umls')
+    if not query:
+        query = "Cleft Plate"
+    index_list = ['icd10','msh','doid','umls']
+    if not request.args.get('icd10'):
+        index_list.remove('icd10')
+    if not request.args.get('msh'):
+        index_list.remove('msh')
+    if not request.args.get('doid'):
+        index_list.remove('doid')
+    if not request.args.get('umls'):
+        index_list.remove('umls')
     
     print(index_list)
 

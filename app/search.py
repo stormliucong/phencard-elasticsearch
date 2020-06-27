@@ -43,6 +43,8 @@ def search(term: str, index_list: list) -> List[SearchResult]:
         }
     }
     print(INDEX_NAMES)
-    result = es.search(index=INDEX_NAMES, body=query_string_query)
-        
-    return [SearchResult.from_doc(hit) for hit in result["hits"]["hits"]]
+    search_result = [] 
+    for index in INDEX_NAMES:
+        result = es.search(index=index, body=query_string_query,size=10) # return top 10 for each index.
+        search_result.extend([SearchResult.from_doc(hit) for hit in result["hits"]["hits"]])
+    return search_result
