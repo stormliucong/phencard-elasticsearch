@@ -1,0 +1,101 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="jumbotron text-center">
+	<h1 class="display-4"><i class="material-icons" style="font-size: 48px">assessment</i>Results </h1>
+    <p class="lead">Please export the results to see all the relative database results.</p>
+	<a href="{{ url_for('phencards') }}"><button type="button" class="btn btn-success" style="margin-right: 15px"><i class="material-icons" style="font-size: 16px;">redo</i>Re-analyze</button></a>
+
+	<a data-toggle="modal" data-target="#export-data"><button type="button" class="btn btn-info"><i class="material-icons" style="font-size: 16px">cloud_download</i>Export</button></a>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="export-data">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Export Results</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container" >
+
+<head>
+<style>
+table, th, td {
+  border: 2px #4b873f;
+  border-collapse: collapse;
+}
+th {
+  padding: 2px;
+  text-align: center;
+}
+table#t01 {
+  border: 2px #5e5e5e;
+  width: 100%;
+  background-color: #ececec;
+}
+</style>
+</head>
+
+<table id="t01">
+    <b>Jump to one of these ten sections:</b>
+    <br><br>
+    <tr>
+      <th width="20%"><span style="color: darkblue;"><a class="page-scroll scroll" href="#Aliases">Aliases</a></span></th>
+      <th width="20%"><span style="color: darkblue;"><a class="page-scroll scroll" href="#Related Terms">Related Terms</a></span></th>
+      <th width="20%"><span style="color: darkblue;"><a class="page-scroll scroll" href="#Diseases">Diseases</a></span></th>
+      <th width="20%"><span style="color: darkblue;"><a class="page-scroll scroll" href="#Genes">Genes</a></span></th>
+      <th width="20%"><span style="color: darkblue;"><a class="page-scroll scroll" href="#Pathway">Pathway</a></span></th>
+    </tr>
+    <tr>
+      <th><span style="color: darkblue;"><a class="page-scroll scroll" href="#Drugs">Drugs</a></span></th>
+      <th><span style="color: darkblue;"><a class="page-scroll scroll" href="#Literature">Literature</a></span></th>
+      <th><span style="color: darkblue;"><a class="page-scroll scroll" href="#Companies & Foundations">Companies&Foundations</a></span></th>
+      <th><span style="color: darkblue;"><a class="page-scroll scroll" href="#Clinical Trials">Clinical Trials</a></span></th>
+      <th><span style="color: darkblue;"><a class="page-scroll scroll" href="#Images">Images</a></span></th>
+    </tr>
+</table>
+
+<div class="container" id="Related Terms">
+    <th><span style="color: #efa50e; "><b>Related Terms</b></span></th>
+    <br><br>
+    {% include 'results_sections/related.html' %}
+
+</div>
+<br>
+
+<br>
+
+<div class="container" >
+
+	<!-- error/warning messages -->
+	<div>
+		<ul id="error-messages" role="alert">
+			{% for e in errors %}
+			<li>{{ e }}</li>
+			{% endfor %}
+		</ul>
+	</div>
+
+	<!-- make error/warning messages yellow if any exist -->
+	<script type="text/javascript">
+		$("#error-messages").each(function() {
+			if($(this).children().length > 0) {
+				$(this).addClass("alert alert-warning");
+			}
+		});
+	</script>
+
+</div>
+
+
+
+
+
+{% endblock %}
+

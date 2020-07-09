@@ -1,5 +1,6 @@
 from elasticsearch import Elasticsearch
 from typing import List
+from flask import Markup
 
 
 HEADERS = {'content-type': 'application/json'}
@@ -7,19 +8,23 @@ HEADERS = {'content-type': 'application/json'}
 
 class SearchResult():
     """Represents a product returned from elasticsearch."""
-    def __init__(self, id_, score, name,index):
+    def __init__(self, id_, score, name,index,highlight):
         self.id = id_
         self.name = name
         self.score = score
         self.index = index
+        self.highlight = highlight
 
-    def from_doc(hit) -> 'SearchResult':
+    def from_doc(hit: dict) -> 'SearchResult':
         return SearchResult(
                 index = hit['_index'],
                 name = hit['_source']['NAME'],
                 score = hit['_score'],
-                id_ = hit['_source']['ID']
+                id_ = hit['_source']['ID'],
+                highlight = hit['highlight']['NAME']
             )
+
+
 
 
 def search(term: str, index_list: list) -> List[SearchResult]:
@@ -44,7 +49,12 @@ def search(term: str, index_list: list) -> List[SearchResult]:
     }
     print(INDEX_NAMES)
     search_result = [] 
+    unique_id = []
     for index in INDEX_NAMES:
         result = es.search(index=index, body=query_string_query,size=10) # return top 10 for each index.
-        search_result.extend([SearchResult.from_doc(hit) for hit in result["hits"]["hits"]])
+        for hit in result["hits"]["hits"]:
+            if hit['_index'] + '_' + hit['_source']['ID'] not in unique_id:
+                print(hit)
+                unique_id.append(hit['_index'] + '_' + hit['_source']['ID'])
+                search_result.append(SearchResult.from_doc(hit))
     return search_result

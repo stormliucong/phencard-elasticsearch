@@ -1,17 +1,20 @@
 from app import app
-from app.search import search
-from flask import Flask
-from flask import render_template
-from flask import request
+from app.esearch import search
+from flask import Flask,render_template,request
+from app.forms import PhenCardsForm
+from app.config import Config
 
 
-@app.route('/')
-@app.route('/index')
-def index():
-    """
-    Search for products across a variety of terms, and show 9 results for each.
-    """
-    return render_template('index.html')
+
+
+# @app.route('/')
+# @app.route('/index')
+# def index():
+#     """
+#     Search for products across a variety of terms, and show 9 results for each.
+#     """
+#     return render_template('index.html')
+app.config.from_object(Config)
 
 
 @app.route('/search', methods=['GET', 'POST'])
@@ -40,3 +43,18 @@ def search_single_product():
         'result.html',
         hits=hits
     )
+
+@app.route('/', methods=["GET", "POST"])
+def phencards():
+    form = PhenCardsForm()
+    phen_name = "Cleft Plate"
+    INDEX_LIST = ['icd10','msh','doid','umls']
+
+    if form.validate_on_submit():
+        phen_name = form.phenname.data.strip()
+        hits = search(phen_name,INDEX_LIST)
+        return render_template(
+            'results.html',
+            hits=hits
+        )
+    return render_template('index.html', form=form)
