@@ -26,7 +26,14 @@
                     <li class="nav-item">
                         <a class="nav-link" id="doc2hpo-tab" href="#doc2hpo">Patient notes</a>
                     </li>
+                    <!-- tab for autocompletion integration -->
+                    <li class="nav-item">
+                        <a class="nav-link" id="auto-tab" href="#auto">Autocompletion (BETA)</a>
+                    </li>
                 </ul>
+
+                
+
                 <br>
 
                 <!-- text box to enter HPO IDs -->
@@ -36,6 +43,15 @@
 		    </span>
 			<textarea class="form-control" name="phenname" id="phenname" rows="4" placeholder="e.g. cleft palate (Search by Phenotype Name)"></textarea>
 			<span class="form-text text-muted">Please enter your focused phenotype names / external database ID.</span>
+        </div> 
+        
+       <!-- text box to enter patient description -->
+		<div class="form-group" id="auto" style="display:none;">
+            <h3><i class="material-icons">book</i>Enter you want to search for here:</h3>
+            {{ form.csrf_token }}
+			<!-- <textarea class="form-control" name="phenname" id="phenname" rows="4" placeholder="e.g. cleft palate (Search by Phenotype Name)"></textarea> -->
+            <input id="typeahead" class="typeahead" type="text" placeholder="cleft palate">
+            <span class="form-text text-muted">Please enter your focused phenotype names / external database ID.</span>
 		</div> 
 
 		<!-- text box to enter patient description -->
@@ -67,11 +83,26 @@
     // clicked on manual tab
     $('#manual-tab').on('click', function (e) {
         e.preventDefault();
-        $("#manual").show();
+        $("#auto").hide();
         $("#doc2hpo").hide();
+        $("#manual").show();
         $("#doc2hpo-tab").removeClass("active");
+        $("#auto-tab").removeClass("active");
         $("#manual-tab").addClass("active");
 
+        // uncheck doc2hpo checkbox
+        $( "#doc2hpo_check" ).prop("checked", false);
+    });
+
+    // clicked on autocompletion tab
+    $('#auto-tab').on('click', function (e) {
+        e.preventDefault();
+        $("#manual").hide();
+        $("#doc2hpo").hide();
+        $("#auto").show();
+        $("#doc2hpo-tab").removeClass("active");
+        $("#manual-tab").removeClass("active");
+        $("#auto-tab").addClass("active");
         // uncheck doc2hpo checkbox
         $( "#doc2hpo_check" ).prop("checked", false);
     });
@@ -79,13 +110,17 @@
     // clicked on doc2hpo tab
     $('#doc2hpo-tab').on('click', function (e) {
         e.preventDefault();
-        $("#doc2hpo").show();
         $("#manual").hide();
+        $("#auto").hide();
+        $("#doc2hpo").show();
         $("#manual-tab").removeClass("active");
+        $("#auto-tab").removeClass("active");
         $("#doc2hpo-tab").addClass("active");
 
         // check doc2hpo checkbox
         $( "#doc2hpo_check" ).prop("checked", true);
     });
+
+
 </script>
 {% endblock %}

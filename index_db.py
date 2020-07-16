@@ -148,25 +148,43 @@ def index_umls(INDEX_NAME='umls',path_to_txt='/Users/cl3720/python-workspace/phe
 
 def index_autosuggest(INDEX_NAME='autosuggest',path_to_txt='/Users/cl3720/python-workspace/phencard-elasticsearch/db/ICD10-DATA.txt'):
     request_body = {
-        "settings": {},
+        "settings": {
+            "analysis": {
+                "filter": {
+                    "english_stop": {
+                        "type": "stop",
+                        "stopwords":  "_english_"
+                        }
+                },
+                "analyzer": {
+                    "rebuilt_stop": {
+                    "tokenizer": "lowercase",
+                    "filter": [
+                        "english_stop","lowercase"          
+                    ]
+                    }
+                }
+            }
+        },
         "mappings": {
             "properties": {
                 "ID": {
                     "type": "text"
                 },
                 "NAME": {
-                    "type": "text"
+                    "type": "text",
                 },
-                "NAMESUGGEST":{ "type" : "completion",
-                    "analyzer" : "simple",
-                    "search_analyzer" : "simple"
+                "NAMESUGGEST":{ 
+                    "type" : "completion",
+                    "analyzer" : "rebuilt_stop"
                 },
                 "ABBR": {
-                    "type": "text"
+                    "type": "text",
                 }
             }
         }
     }
+    
     if es is not None:
             es.indices.delete(index=INDEX_NAME, ignore=404)
             es.indices.create(index=INDEX_NAME, body=request_body)
@@ -181,8 +199,8 @@ def index_autosuggest(INDEX_NAME='autosuggest',path_to_txt='/Users/cl3720/python
                     data['NAME'] = eles[4]
                     data['ABBR'] = eles[3]
                     data['NAMESUGGEST'] = {}
-                    data['NAMESUGGEST']['input'] = eles[4].split( )
-                    data['NAMESUGGEST']['output'] = eles[4]
+                    data['NAMESUGGEST']['input'] = [eles[4]]
+                    data['NAMESUGGEST']['input'].extend(eles[4].split())
                     action = {"_index": INDEX_NAME, '_source': data}
                     es_data.append(action)
                     if len(es_data) > 1000:
